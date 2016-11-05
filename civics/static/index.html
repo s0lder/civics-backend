@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Just Cause</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    </head>
+    <body>
+        <div id="stories">
+            <h1>Stories</h1>
+            <div id="stories-content">
+                <p>
+                    Sorry! No content yet!
+                </p>
+            </div>
+        </div>
+        <script type="text/javascript">
+            $.ajax({
+                url: '/stories',
+                dataType: 'json',
+                success: function(data) {
+                    var content = $('#stories-content');
+                    content.empty();
+                    for (var i = 0; i < data.stories.length; i++) {
+                        var story = data.stories[i];
+                        var heading = $('<h2>' + story.name + '</h2>');
+                        var text = $('<p>' + story.story + '</h2>');
+                        var container = $('<p></p>');
+                        container.append(heading);
+                        container.append(text);
+                        content.append(container);
+                    }
+                }});
+        </script>
+    </body>
+</html>

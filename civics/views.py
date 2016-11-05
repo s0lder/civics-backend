@@ -7,7 +7,7 @@ from .utils import validate_story
 
 @app.route('/')
 def index():
-    return "Hello World"
+    return app.send_static_file('index.html')
 
 
 @app.route('/stories', methods=['GET'])
