@@ -1,6 +1,22 @@
+from peewee import *
 from peewee import create_model_tables
 
 from . import database
+
+
+class Representative(database.Model):
+    name = CharField()
+    email = CharField()
+
+
+class District(database.Model):
+    representative = ForeignKeyField(Representative, related_name='district', unique=True)
+
+
+class Story(database.Model):
+    name = CharField()
+    story = TextField()
+    district = ForeignKeyField(District, related_name='stories')
 
 
 def create_tables(fail_silently=False):
