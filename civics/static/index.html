@@ -55,10 +55,15 @@
                         for (var i = 0; i < data.stories.length; i++) {
                             var story = data.stories[i];
 
-                            var heading = $('<h2>' + story.name + '</h2>');
-                            var text = $('<p>' + story.story + '</h2>');
-                            var container = $('<p></p>');
+                            var heading = $('<div class="panel-heading"><strong>' + story.name + '</strong></div>');
 
+                            var story_date = $('<em>' + (new Date(story.date)).toLocaleDateString("en-US") + '</em>');
+                            story_date.css('float', 'right');
+
+                            var text = $('<div class="panel-body">' + story.story + '</div>');
+                            var container = $('<div class="panel panel-danger"></div>');
+
+                            heading.append(story_date);
                             container.append(heading);
                             container.append(text);
                             content.append(container);
