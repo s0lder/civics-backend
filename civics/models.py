@@ -10,12 +10,14 @@ class Representative(database.Model):
 
 
 class District(database.Model):
+    number = IntegerField()
     representative = ForeignKeyField(Representative, related_name='district', unique=True)
 
 
 class Story(database.Model):
     name = CharField()
     story = TextField()
+    date = DateField()
     district = ForeignKeyField(District, related_name='stories')
 
 
