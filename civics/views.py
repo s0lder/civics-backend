@@ -1,7 +1,8 @@
-from flask import request, jsonify
+from flask import abort, jsonify, request
 
 from . import app
 from .models import Story, District, Representative
+from .utils import validate_story
 
 
 @app.route('/')
@@ -14,6 +15,19 @@ def get_stories():
     stories = Story.select()
     story_list = [x.json() for x in stories]
     return jsonify({'stories': story_list})
+
+
+@app.route('/stories', methods=['POST'])
+def submit_story():
+    form = request.form
+    if not validate_story(form):
+        return abort(400)
+    story = Story(name=form['name'],
+                  story=form['story'],
+                  district=form['district'],
+                  date=form['date'])
+    story.save()
+    return jsonify(story.json())
 
 
 @app.route('/districts', methods=['GET'])
