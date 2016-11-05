@@ -1,5 +1,8 @@
+import json
+
 from peewee import *
 from peewee import create_model_tables
+from playhouse.shortcuts import dict_to_model
 
 from . import database
 
@@ -24,3 +27,19 @@ class Story(database.Model):
 def create_tables(fail_silently=False):
     models = database.Model.__subclasses__()
     create_model_tables(models, fail_silently=fail_silently)
+
+
+def load_json(filename):
+    pairs = [("representatives", Representative),
+             ("districts", District),
+             ("stories", Story)]
+    with open(filename, 'r') as f:
+        data = json.load(f)
+        for (name, model) in pairs:
+            try:
+                for row in data[name]:
+                    m = dict_to_model(model, row)
+                    m.save()
+            except Exception as e:
+                print("Error loading data from section: %s" % name)
+                print(str(e))

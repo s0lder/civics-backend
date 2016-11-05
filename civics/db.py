@@ -1,4 +1,5 @@
 from peewee import Model
+from playhouse.shortcuts import model_to_dict
 
 
 class Database:
@@ -21,6 +22,9 @@ class Database:
 
     def get_model(self):
         class FlaskModel(Model):
+            def json(self):
+                return model_to_dict(self)
+
             class Meta:
                 database = self.database
         return FlaskModel

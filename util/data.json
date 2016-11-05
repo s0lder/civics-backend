@@ -1,0 +1,17 @@
+{
+    "representatives": [
+        {"name": "Michael Smith", "email": "michael@usa.gov"},
+        {"name": "Justin Torre", "email": "justin@usa.gov"},
+        {"name": "Sarah Bernt", "email": "sarah@usa.gov"}
+    ],
+
+    "districts": [
+        {"number": 1, "representative": 1},
+        {"number": 2, "representative": 2},
+        {"number": 3, "representative": 3}
+    ],
+
+    "stories": [
+        {"name": "Michael", "district": 1, "story": "I got evicted yo!", "date": "2016-11-05"}
+    ]
+}
