@@ -13,8 +13,9 @@ class Representative(database.Model):
 
 
 class District(database.Model):
-    number = IntegerField()
-    representative = ForeignKeyField(Representative, related_name='district', unique=True)
+    ocd = CharField(unique=True)
+    name = CharField()
+    representative = ForeignKeyField(Representative, related_name='district', unique=True, null=True)
 
 
 class Story(database.Model):

@@ -34,8 +34,11 @@
                 </div>
                 <div class="form-group">
                     <label for="district">District</label>
-                    <select name="district" class="form-control" id="district-selector">
-                    </select>
+                    <div class="input-group">
+                        <select name="district" class="form-control" id="district-selector">
+                        </select>
+                        <span id="district-chooser" class="input-group-addon btn btn-success">Help Me Choose</span>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label for="story">Story</label>
@@ -43,6 +46,29 @@
                 </div>
                 <input type="submit" class="btn" />
             </form>
+        </div>
+
+        <div class="modal fade" id="district-modal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Find Your District</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>
+                            Enter your address to find your district. Don't worry, we won't
+                            store this information.
+                        </p>
+                        <form id="district-chooser-form">
+                            <div class="form-group">
+                                <label for="address">Address</label>
+                                <input type="text" name="address" class="form-control" />
+                            </div>
+                            <input type="submit" class="btn" />
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
         <script type="text/javascript">
             function refresh_stories() {
@@ -81,11 +107,11 @@
                         for (var i = 0; i < data.districts.length; i++) {
                             var district = data.districts[i];
 
-                            var option = $('<option value="' + district.id + '">' + district.number + '</option>');
+                            var option = $('<option value="' + district.id + '">' + district.name + '</option>');
                             content.append(option);
                         }
                     }
-                })
+                });
             }
 
             function register_form_intercept() {
@@ -99,9 +125,30 @@
                 });
             }
 
+            function register_district_chooser() {
+                $('#district-chooser').click(function (e) {
+                    $('#district-modal').modal();
+                });
+                $('#district-chooser-form').submit(function (e) {
+                    e.preventDefault();
+                    var form = $(this);
+                    var url = '/district?' + form.serialize();
+                    $.ajax({
+                        url: url,
+                        dataType: 'json',
+                        success: function(district) {
+                            form.trigger('reset');
+                            $('#district-modal').modal('hide');
+                            $('#district-selector').val(district.id);
+                        }
+                    });
+                });
+            }
+
             refresh_stories();
             refresh_districts();
             register_form_intercept();
+            register_district_chooser();
         </script>
     </body>
 </html>

@@ -1,4 +1,5 @@
 from flask import abort, jsonify, request
+import requests
 
 from . import app
 from .models import Story, District, Representative
@@ -42,3 +43,19 @@ def get_representatives():
     representatives = Representative.select()
     representative_list = [x.json() for x in representatives]
     return jsonify({'representatives': representative_list})
+
+
+@app.route('/district', methods=['GET'])
+def get_district():
+    address = request.args.get('address')
+    params = {'key': app.config['CIVICS_API_KEY'], 'address': address}
+    r = requests.get('https://www.googleapis.com/civicinfo/v2/representatives', params=params)
+    data = r.json()
+    if 'divisions' not in data:
+        return abort(400)
+    divisions = data['divisions']
+    for ocd in divisions.keys():
+        if ocd.startswith('ocd-division/country:us/state:ma/sldl'):
+            district = District.get(District.ocd == ocd)
+            return jsonify(district.json())
+    return abort(404)
